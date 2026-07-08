@@ -79,7 +79,7 @@ const portalOverworldZ = Math.round(portalNetherZ * 8);
 
         <div class="portal-coords">
 
-            OW
+            Over World
             <br>
 
             X: ${portalOverworldX}
@@ -90,7 +90,7 @@ const portalOverworldZ = Math.round(portalNetherZ * 8);
 
             <br><br>
 
-            N
+            Nether
             <br>
 
             X: ${portalNetherX}
