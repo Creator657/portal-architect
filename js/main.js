@@ -56,12 +56,28 @@ for (let z = radius; z >= -radius; z--) {
         }
 
         card.innerHTML = `
-            <div class="portal-frame">
-                <div class="portal-center">
-                    ${name}
-                </div>
-            </div>
-        `;
+<div class="portal-frame">
+
+    <div class="portal-center">
+
+        <div class="portal-name">
+            ${name}
+        </div>
+
+        <div class="portal-coords">
+
+            X: ---
+
+            <br>
+
+            Z: ---
+
+        </div>
+
+    </div>
+
+</div>
+`;
 
         row.appendChild(card);
 
