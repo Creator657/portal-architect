@@ -314,13 +314,15 @@ button:hover {
 
 .portal-frame{
 
-    background:#120018;
+    width:140px;
 
-    border:6px solid #1b0d24;
+    height:220px;
+
+    background:#1b1026;
+
+    border:8px solid #0d0714;
 
     border-radius:8px;
-
-    height:130px;
 
     display:flex;
 
@@ -328,16 +330,15 @@ button:hover {
 
     align-items:center;
 
-    box-shadow:
-        0 0 12px rgba(0,0,0,.6);
+    box-shadow:0 0 15px rgba(0,0,0,.6);
 
 }
 
 .portal-center{
 
-    width:55px;
+    width:100px;
 
-    height:90px;
+    height:180px;
 
     background:#7b2cff;
 
@@ -345,17 +346,15 @@ button:hover {
 
     display:flex;
 
-    justify-content:center;
+    flex-direction:column;
+
+    justify-content:flex-start;
 
     align-items:center;
 
-    text-align:center;
+    padding-top:12px;
 
     color:white;
-
-    font-weight:bold;
-
-    text-shadow:0 0 8px white;
 
 }
 
@@ -371,10 +370,12 @@ button:hover {
 
 .portal-coords{
 
+    margin-top:10px;
+
     font-size:12px;
 
-    line-height:18px;
+    text-align:center;
 
-    opacity:.9;
+    line-height:16px;
 
 }
