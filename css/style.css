@@ -274,7 +274,11 @@ button:hover {
 
 .portal-card{
 
-    width:90px;
+    width:140px;
+
+    display:flex;
+
+    justify-content:center;
 
 }
 
