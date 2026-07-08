@@ -25,39 +25,51 @@ button.addEventListener("click", function(){
 
 
 
-    document.getElementById("results").innerHTML = `
+const results = document.getElementById("results");
 
-        <div class="portal-result">
+results.innerHTML = "";
 
-            <h3>🟪 Mother Portal</h3>
+for (let z = radius; z >= -radius; z--) {
 
-            <p>
-            Overworld:
-            <br>
-            X: ${overworldX}
-            <br>
-            Z: ${overworldZ}
-            </p>
+    const row = document.createElement("div");
+    row.className = "portal-row";
 
+    for (let x = -radius; x <= radius; x++) {
 
-            <p>
-            Nether:
-            <br>
-            X: ${netherX}
-            <br>
-            Z: ${netherZ}
-            </p>
+        const card = document.createElement("div");
+        card.className = "portal-card";
 
+        let name = "";
 
-            <p>
-            Grid Radius:
-            ${radius}
-            </p>
+        if (x === 0 && z === 0) {
 
+            name = "★★★";
 
-        </div>
+        } else {
 
-    `;
+            if (z > 0) name += "N" + z;
+            if (z < 0) name += "S" + Math.abs(z);
+
+            if (x > 0) name += "E" + x;
+            if (x < 0) name += "W" + Math.abs(x);
+
+        }
+
+        card.innerHTML = `
+            <div class="portal-frame">
+                <div class="portal-center">
+                    ${name}
+                </div>
+            </div>
+        `;
+
+        row.appendChild(card);
+
+    }
+
+    results.appendChild(row);
+
+};
 
 
 });
