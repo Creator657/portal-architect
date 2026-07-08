@@ -18,6 +18,17 @@ button.addEventListener("click", function(){
         document.getElementById("radius").value
     );
 
+    const maxRadius = 10;
+
+if (radius > maxRadius) {
+
+    alert(
+        "Maximum grid radius is " + maxRadius
+    );
+
+    return;
+
+}
 
     const netherX = Math.round(overworldX / 8);
 
