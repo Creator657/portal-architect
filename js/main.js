@@ -18,13 +18,9 @@ button.addEventListener("click", function(){
         document.getElementById("radius").value
     );
 
-    const maxRadius = 10;
+    if (radius > 15) {
 
-if (radius > maxRadius) {
-
-    alert(
-        "Maximum grid radius is " + maxRadius
-    );
+    alert("Maximum grid radius is 15 for performance.");
 
     return;
 
