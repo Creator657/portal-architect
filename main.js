@@ -73,9 +73,11 @@ button.addEventListener("click", function () {
             const portalNetherX = netherX + (x * 35);
             const portalNetherZ = netherZ + (z * 40);
 
-            // The mother portal keeps the exact Overworld coordinates you typed in.
-            // Every other portal is derived from the Nether grid, so its Overworld
-            // coordinate is the rounded eight-block conversion of that grid point.
+            // The Mother Portal echoes back the exact Overworld coordinates you
+            // typed in — it is never recalculated. Its Nether line still shows
+            // the rounded value used to anchor the grid. Every other portal only
+            // exists in Nether space, so its Overworld line is calculated back
+            // (Nether x 8) since there's no original input to preserve for it.
             const portalOverworldX = isCenter ? overworldX : Math.round(portalNetherX * 8);
             const portalOverworldZ = isCenter ? overworldZ : Math.round(portalNetherZ * 8);
 
