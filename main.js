@@ -2,14 +2,20 @@ console.log("Portal Architect loaded");
 
 const button = document.getElementById("generateBtn");
 const errorEl = document.getElementById("formError");
+const noticeEl = document.getElementById("radiusNotice");
 
 function showError(message) {
     errorEl.textContent = message;
 }
 
+function showNotice(message) {
+    noticeEl.textContent = message;
+}
+
 button.addEventListener("click", function () {
 
     errorEl.textContent = "";
+    noticeEl.textContent = "";
 
     const overworldXInput = document.getElementById("motherX").value.trim();
     const overworldZInput = document.getElementById("motherZ").value.trim();
@@ -29,7 +35,13 @@ button.addEventListener("click", function () {
         return;
     }
 
-    radius = Math.trunc(radius);
+    const truncatedRadius = Math.trunc(radius);
+
+    if (truncatedRadius !== radius) {
+        showNotice("Rounding radius to " + truncatedRadius + ".");
+    }
+
+    radius = truncatedRadius;
 
     if (radius < 1) {
         showError("Grid radius must be at least 1.");
