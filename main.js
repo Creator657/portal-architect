@@ -137,4 +137,3 @@ button.addEventListener("click", function () {
         results.appendChild(row);
     }
 });
-
