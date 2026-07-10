@@ -134,6 +134,6 @@ button.addEventListener("click", function () {
             row.appendChild(card);
         }
 
-        results.appendChild(row);
+        results.appendChild(row); 
     }
 });
