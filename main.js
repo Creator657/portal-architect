@@ -20,6 +20,10 @@ function getCountFromResponse(response) {
     return null;
 }
 
+let debugCommitStatus = null;
+let debugDeployStatus = null;
+let debugRateRemaining = null;
+
 Promise.all([
     fetch("https://api.github.com/repos/Creator657/Portal-Architect/commits?per_page=1"),
     fetch("https://api.github.com/repos/Creator657/Portal-Architect/deployments?per_page=1")
@@ -27,8 +31,12 @@ Promise.all([
     .then(function (responses) {
         const [commitsResponse, deploymentsResponse] = responses;
 
+        debugCommitStatus = commitsResponse.status;
+        debugDeployStatus = deploymentsResponse.status;
+        debugRateRemaining = commitsResponse.headers.get("X-RateLimit-Remaining");
+
         if (!commitsResponse.ok || !deploymentsResponse.ok) {
-            throw new Error("GitHub API request failed (status " + commitsResponse.status + "/" + deploymentsResponse.status + ")");
+            throw new Error("GitHub API request failed (status " + debugCommitStatus + "/" + debugDeployStatus + ")");
         }
 
         const commitCount = getCountFromResponse(commitsResponse);
@@ -42,9 +50,23 @@ Promise.all([
         commitFooter.style.color = "#8a6fa8";
     })
     .catch(function (err) {
-        commitFooter.textContent = "Unable to load repository stats.";
+        const timestamp = Date.now().toString(36);
+        const debugId = "PA-" + timestamp +
+            "-C" + (debugCommitStatus !== null ? debugCommitStatus : "NA") +
+            "-D" + (debugDeployStatus !== null ? debugDeployStatus : "NA") +
+            "-R" + (debugRateRemaining !== null ? debugRateRemaining : "NA");
+
+        commitFooter.textContent = "Unable to load repository stats. (Debug ID: " + debugId + ")";
         commitFooter.style.color = "#ff8a8a";
-        console.error("Footer stats fetch failed:", err);
+
+        console.error("Footer stats fetch failed.", {
+            debugId: debugId,
+            message: err.message,
+            commitStatus: debugCommitStatus,
+            deployStatus: debugDeployStatus,
+            rateLimitRemaining: debugRateRemaining,
+            timeISO: new Date().toISOString()
+        });
     });
 
 const button = document.getElementById("generateBtn");
