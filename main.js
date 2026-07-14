@@ -2,27 +2,49 @@ console.log("Portal Architect loaded");
 
 const commitFooter = document.getElementById("commitFooter");
 
-fetch("https://api.github.com/repos/Creator657/Portal-Architect/commits?per_page=1")
-    .then(function (response) {
-        const linkHeader = response.headers.get("Link");
-        let commitCount = null;
+function getCountFromResponse(response) {
+    const linkHeader = response.headers.get("Link");
 
-        if (linkHeader) {
-            const match = linkHeader.match(/[?&]page=(\d+)>;\s*rel="last"/);
-            if (match) {
-                commitCount = Number(match[1]);
-            }
-        } else if (response.ok) {
-            // No Link header means there's only one page of results, i.e. one commit.
-            commitCount = 1;
+    if (linkHeader) {
+        const match = linkHeader.match(/[?&]page=(\d+)>;\s*rel="last"/);
+        if (match) {
+            return Number(match[1]);
+        }
+    }
+
+    if (response.ok) {
+        // No Link header means there's only one page of results, i.e. one item.
+        return 1;
+    }
+
+    return null;
+}
+
+Promise.all([
+    fetch("https://api.github.com/repos/Creator657/Portal-Architect/commits?per_page=1"),
+    fetch("https://api.github.com/repos/Creator657/Portal-Architect/deployments?per_page=1")
+])
+    .then(function (responses) {
+        const [commitsResponse, deploymentsResponse] = responses;
+
+        if (!commitsResponse.ok || !deploymentsResponse.ok) {
+            throw new Error("GitHub API request failed (status " + commitsResponse.status + "/" + deploymentsResponse.status + ")");
         }
 
-        if (commitCount !== null) {
-            commitFooter.textContent = commitCount + (commitCount === 1 ? " commit" : " commits") + " so far";
+        const commitCount = getCountFromResponse(commitsResponse);
+        const deploymentCount = getCountFromResponse(deploymentsResponse);
+
+        if (commitCount === null || deploymentCount === null) {
+            throw new Error("Could not parse commit or deployment count");
         }
+
+        commitFooter.textContent = commitCount + "·" + deploymentCount;
+        commitFooter.style.color = "#8a6fa8";
     })
-    .catch(function () {
-        // Fail silently, the footer just stays empty if the API is unreachable or rate-limited.
+    .catch(function (err) {
+        commitFooter.textContent = "Unable to load repository stats.";
+        commitFooter.style.color = "#ff8a8a";
+        console.error("Footer stats fetch failed:", err);
     });
 
 const button = document.getElementById("generateBtn");
