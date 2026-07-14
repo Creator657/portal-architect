@@ -186,7 +186,7 @@ button:hover {
 
 .mother-portal .portal-frame {
     border-color: #ffd54a;
-    animation: mother-glow 2.4s ease-in-out infinite, portal-shimmer 4s ease-in-out infinite;
+    animation: mother-glow 2.4s ease-in-out infinite;
 }
 
 @keyframes mother-glow {
