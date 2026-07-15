@@ -20,6 +20,8 @@ function getCountFromResponse(response) {
     return null;
 }
 
+//Debug ID start
+
 let debugCommitStatus = null;
 let debugDeployStatus = null;
 let debugRateRemaining = null;
@@ -47,7 +49,7 @@ Promise.all([
         }
 
         const timestamp = Date.now().toString(36);
-        commitFooter.textContent = "debug ID: PA-" + timestamp +
+        commitFooter.textContent = "Debug ID: PA-" + timestamp +
             "-C" + commitCount +
             "-D" + deploymentCount +
             "-R" + (debugRateRemaining !== null ? debugRateRemaining : "NA");
@@ -72,6 +74,8 @@ Promise.all([
             timeISO: new Date().toISOString()
         });
     });
+
+//Debug Id end
 
 const button = document.getElementById("generateBtn");
 const errorEl = document.getElementById("formError");
