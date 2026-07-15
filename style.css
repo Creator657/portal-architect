@@ -150,18 +150,9 @@ button:hover {
 .portal-frame {
     width: 140px;
     height: 220px;
-    background-image:
-        radial-gradient(circle at 20% 25%, #241033 0 9px, transparent 10px),
-        radial-gradient(circle at 60% 15%, #0d0714 0 12px, transparent 13px),
-        radial-gradient(circle at 85% 40%, #2a1140 0 7px, transparent 8px),
-        radial-gradient(circle at 35% 55%, #0d0714 0 14px, transparent 15px),
-        radial-gradient(circle at 75% 65%, #1b1026 0 10px, transparent 11px),
-        radial-gradient(circle at 15% 80%, #2a1140 0 9px, transparent 10px),
-        radial-gradient(circle at 90% 88%, #0d0714 0 12px, transparent 13px),
-        radial-gradient(circle at 45% 90%, #1b1026 0 8px, transparent 9px);
-    background-size: 46px 46px;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+CjxyZWN0IHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzE1MGEyMCIvPgo8cG9seWdvbiBwb2ludHM9IjAsMCAxNCwyIDEwLDE0IDAsMTYiIGZpbGw9IiMxYjEwMjYiLz4KPHBvbHlnb24gcG9pbnRzPSIxNCwyIDMwLDAgMzIsMTIgMTgsMTYgMTAsMTQiIGZpbGw9IiMwZDA3MTQiLz4KPHBvbHlnb24gcG9pbnRzPSIzMiwxMiA0OCwxMCA0OCwyNCAzNCwyNiAxOCwxNiIgZmlsbD0iIzI0MTAzMyIvPgo8cG9seWdvbiBwb2ludHM9IjAsMTYgMTAsMTQgMTgsMTYgMTQsMzAgMCwzMiIgZmlsbD0iIzBkMDcxNCIvPgo8cG9seWdvbiBwb2ludHM9IjE4LDE2IDM0LDI2IDMwLDQwIDE0LDMwIiBmaWxsPSIjMWIxMDI2Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMzQsMjYgNDgsMjQgNDgsNDAgMzAsNDAiIGZpbGw9IiMwZDA3MTQiLz4KPHBvbHlnb24gcG9pbnRzPSIwLDMyIDE0LDMwIDEyLDQ4IDAsNDgiIGZpbGw9IiMyNDEwMzMiLz4KPHBvbHlnb24gcG9pbnRzPSIxNCwzMCAzMCw0MCAyNiw0OCAxMiw0OCIgZmlsbD0iIzBkMDcxNCIvPgo8cG9seWdvbiBwb2ludHM9IjMwLDQwIDQ4LDQwIDQ4LDQ4IDI2LDQ4IiBmaWxsPSIjMWIxMDI2Ii8+CjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIxLjQiIGZpbGw9IiMzZDFhNWMiLz4KPGNpcmNsZSBjeD0iMzgiIGN5PSIxNyIgcj0iMS4xIiBmaWxsPSIjM2QxYTVjIi8+CjxjaXJjbGUgY3g9IjIyIiBjeT0iMzQiIHI9IjEuMyIgZmlsbD0iIzNkMWE1YyIvPgo8Y2lyY2xlIGN4PSI0MSIgY3k9IjQ0IiByPSIxIiBmaWxsPSIjM2QxYTVjIi8+Cjwvc3ZnPg==");
+    background-size: 48px 48px;
     background-repeat: repeat;
-    background-color: #150a20;
     border: 8px solid #0d0714;
     border-radius: 4px;
     display: flex;
@@ -240,26 +231,18 @@ button:hover {
 .portal-center::before {
     content: "";
     position: absolute;
-    inset: -15%;
+    inset: -20%;
     background-image:
-        conic-gradient(from 0deg at 50% 50%,
-            #4b0f8a 0deg 90deg,
-            #9b4dff 90deg 180deg,
-            #7b2cff 180deg 270deg,
-            #c86cff 270deg 360deg),
-        conic-gradient(from 0deg at 50% 50%,
-            #4b0f8a 0deg 90deg,
-            #9b4dff 90deg 180deg,
-            #7b2cff 180deg 270deg,
-            #c86cff 270deg 360deg);
-    background-size: 50px 50px, 50px 50px;
-    background-position: 0 0, 25px 25px;
+        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxwYXRoIGQ9Ik0yMCwyMCBtMCwtMiBhMiwyIDAgMCAxIDIsMiBhNCw0IDAgMCAxIC00LDQgYTYsNiAwIDAgMSA2LDYgYTgsOCAwIDAgMSAtOCw4IgpmaWxsPSJub25lIiBzdHJva2U9IiNkOWE4ZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIxOCIgcj0iMS42IiBmaWxsPSIjZjFkOWZmIi8+Cjwvc3ZnPg=="),
+        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxwYXRoIGQ9Ik0yMCwyMCBtMCwtMiBhMiwyIDAgMCAxIDIsMiBhNCw0IDAgMCAxIC00LDQgYTYsNiAwIDAgMSA2LDYgYTgsOCAwIDAgMSAtOCw4IgpmaWxsPSJub25lIiBzdHJva2U9IiNkOWE4ZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIxOCIgcj0iMS42IiBmaWxsPSIjZjFkOWZmIi8+Cjwvc3ZnPg==");
+    background-size: 40px 40px, 40px 40px;
+    background-position: 0 0, 20px 20px;
     background-repeat: repeat, repeat;
-    animation: portal-swirl 8s linear infinite;
+    animation: portal-swirl 9s linear infinite;
 }
 
 @keyframes portal-swirl {
-    to { background-position: 50px 50px, 75px 75px; }
+    to { background-position: 40px 40px, 60px 60px; }
 }
 
 .portal-name {
