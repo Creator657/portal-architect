@@ -246,14 +246,20 @@ button:hover {
             #4b0f8a 0deg 90deg,
             #9b4dff 90deg 180deg,
             #7b2cff 180deg 270deg,
+            #c86cff 270deg 360deg),
+        conic-gradient(from 0deg at 50% 50%,
+            #4b0f8a 0deg 90deg,
+            #9b4dff 90deg 180deg,
+            #7b2cff 180deg 270deg,
             #c86cff 270deg 360deg);
-    background-size: 32px 32px;
-    background-repeat: repeat;
-    animation: portal-swirl 6s linear infinite;
+    background-size: 50px 50px, 50px 50px;
+    background-position: 0 0, 25px 25px;
+    background-repeat: repeat, repeat;
+    animation: portal-swirl 8s linear infinite;
 }
 
 @keyframes portal-swirl {
-    to { background-position: 32px 32px; }
+    to { background-position: 50px 50px, 75px 75px; }
 }
 
 .portal-name {
