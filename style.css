@@ -170,25 +170,12 @@ button:hover {
     z-index: 5;
 }
 
-.portal-frame:hover .portal-center::before {
-    animation-duration: 3s;
+.portal-frame:hover .portal-center::after {
+    animation-duration: 2s;
 }
 
 .mother-portal .portal-frame:hover {
     box-shadow: 0 0 45px rgba(255, 213, 74, 1), 0 0 15px rgba(0, 0, 0, .6);
-}
-
-.portal-frame::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -60%;
-    width: 45%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(200, 108, 255, .25), transparent);
-    animation: portal-shimmer 4s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 1;
 }
 
 @keyframes portal-shimmer {
@@ -215,7 +202,7 @@ button:hover {
 .portal-center {
     width: 100px;
     height: 180px;
-    background: #4b0f8a;
+    background: radial-gradient(circle at 50% 50%, #7b2cff 0%, #3F1187 100%);
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -228,21 +215,16 @@ button:hover {
     overflow: hidden;
 }
 
-.portal-center::before {
+.portal-center::after {
     content: "";
     position: absolute;
-    inset: -20%;
-    background-image:
-        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxwYXRoIGQ9Ik0yMCwyMCBtMCwtMiBhMiwyIDAgMCAxIDIsMiBhNCw0IDAgMCAxIC00LDQgYTYsNiAwIDAgMSA2LDYgYTgsOCAwIDAgMSAtOCw4IgpmaWxsPSJub25lIiBzdHJva2U9IiNkOWE4ZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIxOCIgcj0iMS42IiBmaWxsPSIjZjFkOWZmIi8+Cjwvc3ZnPg=="),
-        url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+CjxwYXRoIGQ9Ik0yMCwyMCBtMCwtMiBhMiwyIDAgMCAxIDIsMiBhNCw0IDAgMCAxIC00LDQgYTYsNiAwIDAgMSA2LDYgYTgsOCAwIDAgMSAtOCw4IgpmaWxsPSJub25lIiBzdHJva2U9IiNkOWE4ZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIxOCIgcj0iMS42IiBmaWxsPSIjZjFkOWZmIi8+Cjwvc3ZnPg==");
-    background-size: 40px 40px, 40px 40px;
-    background-position: 0 0, 20px 20px;
-    background-repeat: repeat, repeat;
-    animation: portal-swirl 9s linear infinite;
-}
-
-@keyframes portal-swirl {
-    to { background-position: 40px 40px, 60px 60px; }
+    top: 0;
+    left: -60%;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .3), transparent);
+    animation: portal-shimmer 4s ease-in-out infinite;
+    pointer-events: none;
 }
 
 .portal-name {
