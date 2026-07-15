@@ -13,14 +13,11 @@ function getCountFromResponse(response) {
     }
 
     if (response.ok) {
-        // No Link header means there's only one page of results, i.e. one item.
         return 1;
     }
 
     return null;
 }
-
-//Debug ID start
 
 let debugCommitStatus = null;
 let debugDeployStatus = null;
@@ -75,11 +72,15 @@ Promise.all([
         });
     });
 
-//Debug Id end
-
 const button = document.getElementById("generateBtn");
 const errorEl = document.getElementById("formError");
 const noticeEl = document.getElementById("radiusNotice");
+
+const mobileToggle = document.getElementById("mobileToggle");
+
+mobileToggle.addEventListener("change", function () {
+    document.body.classList.toggle("mobile-mode", mobileToggle.checked);
+});
 
 function showError(message) {
     errorEl.textContent = message;
@@ -189,11 +190,6 @@ button.addEventListener("click", function () {
             const portalNetherX = netherX + (x * 35);
             const portalNetherZ = netherZ + (z * 40);
 
-            // The Mother Portal echoes back the exact Overworld coordinates you
-            // typed in — it is never recalculated. Its Nether line still shows
-            // the rounded value used to anchor the grid. Every other portal only
-            // exists in Nether space, so its Overworld line is calculated back
-            // (Nether x 8) since there's no original input to preserve for it.
             const portalOverworldX = isCenter ? overworldX : Math.round(portalNetherX * 8);
             const portalOverworldZ = isCenter ? overworldZ : Math.round(portalNetherZ * 8);
 
