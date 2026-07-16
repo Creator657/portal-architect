@@ -231,43 +231,6 @@ button:hover {
     font-weight: bold;
 }
 
-/* Theme picker */
-
-.theme-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin: 0 0 20px;
-    flex-wrap: wrap;
-}
-
-.theme-label {
-    color: var(--subtitle-color);
-    font-size: 14px;
-}
-
-.theme-btn {
-    width: auto;
-    margin-top: 0;
-    padding: 8px 14px;
-    font-size: 13px;
-    background: var(--tab-inactive-bg);
-    color: var(--subtitle-color);
-    border: 1px solid var(--card-border);
-    border-radius: 20px;
-}
-
-.theme-btn.active {
-    background: var(--button-gradient);
-    color: white;
-}
-
-.theme-btn:hover {
-    transform: none;
-    box-shadow: var(--button-hover-shadow);
-}
-
 /* Results */
 
 #results {
@@ -530,11 +493,6 @@ body.mobile-mode .tool-hint {
     font-size: 11px;
 }
 
-body.mobile-mode .theme-btn {
-    font-size: 11px;
-    padding: 6px 10px;
-}
-
 /* Tools card */
 
 .tools-card {
@@ -651,12 +609,11 @@ body.mobile-mode .theme-btn {
     animation: highlight-pulse .8s ease-in-out 3;
 }
 
-/* Global floating copy button — copies whichever portal is selected */
+/* Floating action buttons — copy (selected portal) and theme picker */
 
-.global-copy-btn {
+.fab {
     position: fixed;
     bottom: 20px;
-    right: 20px;
     width: 52px;
     height: 52px;
     margin: 0;
@@ -675,25 +632,89 @@ body.mobile-mode .theme-btn {
     transition: .2s;
 }
 
-.global-copy-btn:hover {
+.fab:hover {
     transform: scale(1.08);
     box-shadow: 0 4px 20px rgba(200, 108, 255, .6);
 }
 
-.global-copy-btn:disabled {
+#globalCopyBtn {
+    right: 82px;
+}
+
+#globalCopyBtn:disabled {
     opacity: .35;
     cursor: not-allowed;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .4);
 }
 
-.global-copy-btn:disabled:hover {
+#globalCopyBtn:disabled:hover {
     transform: none;
 }
 
-body.mobile-mode .global-copy-btn {
+.theme-menu-btn {
+    right: 20px;
+}
+
+.theme-menu {
+    position: fixed;
+    bottom: 82px;
+    right: 20px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .6);
+    z-index: 1000;
+}
+
+.theme-menu[hidden] {
+    display: none;
+}
+
+.theme-menu-item {
+    width: 100%;
+    margin: 0;
+    padding: 9px 12px;
+    font-size: 13px;
+    text-align: left;
+    background: transparent;
+    color: var(--subtitle-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.theme-menu-item:hover {
+    transform: none;
+    box-shadow: none;
+    background: var(--tab-inactive-bg);
+}
+
+.theme-menu-item.active {
+    background: var(--button-gradient);
+    color: white;
+}
+
+body.mobile-mode .fab {
     width: 44px;
     height: 44px;
     font-size: 18px;
     bottom: 14px;
+}
+
+body.mobile-mode #globalCopyBtn {
+    right: 66px;
+}
+
+body.mobile-mode .theme-menu-btn {
+    right: 14px;
+}
+
+body.mobile-mode .theme-menu {
+    bottom: 66px;
     right: 14px;
 }
