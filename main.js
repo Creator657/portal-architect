@@ -78,6 +78,23 @@ mobileToggle.addEventListener("change", function () {
     document.body.classList.toggle("mobile-mode", mobileToggle.checked);
 });
 
+const themeButtons = Array.from(document.querySelectorAll(".theme-btn"));
+
+themeButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        themeButtons.forEach(function (b) {
+            b.classList.remove("active");
+        });
+        btn.classList.add("active");
+
+        document.body.classList.remove("theme-nether", "theme-overworld", "theme-deepdark");
+
+        if (btn.dataset.theme !== "nether") {
+            document.body.classList.add("theme-" + btn.dataset.theme);
+        }
+    });
+});
+
 // --- Element references --------------------------------------------------
 
 const motherXInput = document.getElementById("motherX");
@@ -168,6 +185,7 @@ function highlightCard(card) {
     setTimeout(function () {
         card.classList.remove("highlighted-portal");
     }, 2200);
+    selectPortal(card);
 }
 
 function findCardByName(name) {
@@ -181,6 +199,63 @@ function findCardByOffset(x, z) {
         return Number(card.dataset.x) === x && Number(card.dataset.z) === z;
     }) || null;
 }
+
+// --- Portal selection + global copy button ----------------------------------
+
+const globalCopyBtn = document.getElementById("globalCopyBtn");
+let selectedPortal = null;
+
+function selectPortal(card) {
+    const previous = document.querySelector(".portal-card.selected-portal");
+    if (previous) {
+        previous.classList.remove("selected-portal");
+    }
+    card.classList.add("selected-portal");
+
+    selectedPortal = {
+        name: card.dataset.portalName,
+        overworldX: Number(card.dataset.overworldX),
+        overworldZ: Number(card.dataset.overworldZ),
+        netherX: Number(card.dataset.netherX),
+        netherZ: Number(card.dataset.netherZ)
+    };
+
+    globalCopyBtn.disabled = false;
+    globalCopyBtn.title = "Copy " + selectedPortal.name;
+}
+
+function clearSelectedPortal() {
+    const previous = document.querySelector(".portal-card.selected-portal");
+    if (previous) {
+        previous.classList.remove("selected-portal");
+    }
+    selectedPortal = null;
+    globalCopyBtn.disabled = true;
+    globalCopyBtn.title = "Select a portal first";
+}
+
+globalCopyBtn.addEventListener("click", function () {
+    if (selectedPortal === null) {
+        return;
+    }
+
+    const text = "Overworld " + selectedPortal.overworldX + ", " + selectedPortal.overworldZ +
+        " | Nether " + selectedPortal.netherX + ", " + selectedPortal.netherZ;
+
+    navigator.clipboard.writeText(text)
+        .then(function () {
+            globalCopyBtn.textContent = "✅";
+            setTimeout(function () {
+                globalCopyBtn.textContent = "📋";
+            }, 1400);
+        })
+        .catch(function () {
+            globalCopyBtn.textContent = "❌";
+            setTimeout(function () {
+                globalCopyBtn.textContent = "📋";
+            }, 1400);
+        });
+});
 
 // --- Tab switching ---------------------------------------------------------
 
@@ -239,15 +314,19 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
                 card.classList.add("mother-portal");
             }
 
-            card.dataset.portalName = name;
-            card.dataset.x = x;
-            card.dataset.z = z;
-
             const portalNetherX = netherX + (x * 35);
             const portalNetherZ = netherZ + (z * 40);
 
             const portalOverworldX = isCenter ? overworldX : Math.round(portalNetherX * 8);
             const portalOverworldZ = isCenter ? overworldZ : Math.round(portalNetherZ * 8);
+
+            card.dataset.portalName = name;
+            card.dataset.x = x;
+            card.dataset.z = z;
+            card.dataset.overworldX = portalOverworldX;
+            card.dataset.overworldZ = portalOverworldZ;
+            card.dataset.netherX = portalNetherX;
+            card.dataset.netherZ = portalNetherZ;
 
             card.innerHTML = `
 <div class="portal-frame">
@@ -284,30 +363,11 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
 
     </div>
 
-    <button type="button" class="copy-btn" aria-label="Copy coordinates">📋</button>
-
 </div>
 `;
 
-            const copyBtn = card.querySelector(".copy-btn");
-            copyBtn.addEventListener("click", function (event) {
-                event.stopPropagation();
-                const text = "Overworld " + portalOverworldX + ", " + portalOverworldZ +
-                    " | Nether " + portalNetherX + ", " + portalNetherZ;
-
-                navigator.clipboard.writeText(text)
-                    .then(function () {
-                        copyBtn.textContent = "✅";
-                        setTimeout(function () {
-                            copyBtn.textContent = "📋";
-                        }, 1400);
-                    })
-                    .catch(function () {
-                        copyBtn.textContent = "❌";
-                        setTimeout(function () {
-                            copyBtn.textContent = "📋";
-                        }, 1400);
-                    });
+            card.addEventListener("click", function () {
+                selectPortal(card);
             });
 
             row.appendChild(card);
@@ -342,6 +402,7 @@ editCoordsBtn.addEventListener("click", function () {
     loadingContainer.style.display = "none";
     resetLoadingUI();
     document.getElementById("results").innerHTML = "";
+    clearSelectedPortal();
     activateTab("grid");
     errorEl.textContent = "";
     noticeEl.textContent = "";
