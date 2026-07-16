@@ -25,7 +25,7 @@
 }
 
 body.theme-overworld {
-    --bg-gradient: linear-gradient(180deg, #6ec6ff 0%, #8fd6ae 45%, #4a8f5c 80%, #2e5c3a 100%);
+    --bg-gradient: linear-gradient(180deg, #6ec6ff 0%, #6b9c46 55%, #4a3524 100%);
     --title-color: #7be08a;
     --title-shadow: 0 0 10px #2e7d32;
     --subtitle-color: #d7f0d2;
@@ -50,7 +50,7 @@ body.theme-overworld {
 }
 
 body.theme-deepdark {
-    --bg-gradient: linear-gradient(180deg, #010202 0%, #04100f 40%, #06201d 75%, #0a3230 100%);
+    --bg-gradient: linear-gradient(180deg, #010202 0%, #0a3250 55%, #2b2b2b 100%);
     --title-color: #1fdede;
     --title-shadow: 0 0 12px #0f8f8f;
     --subtitle-color: #a8dede;
