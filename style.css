@@ -197,7 +197,7 @@ button:hover {
 
 .portal-frame {
     width: 140px;
-    height: 235px;
+    height: 220px;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+CjxyZWN0IHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzE1MGEyMCIvPgo8cG9seWdvbiBwb2ludHM9IjAsMCAxNCwyIDEwLDE0IDAsMTYiIGZpbGw9IiMxYjEwMjYiLz4KPHBvbHlnb24gcG9pbnRzPSIxNCwyIDMwLDAgMzIsMTIgMTgsMTYgMTAsMTQiIGZpbGw9IiMwZDA3MTQiLz4KPHBvbHlnb24gcG9pbnRzPSIzMiwxMiA0OCwxMCA0OCwyNCAzNCwyNiAxOCwxNiIgZmlsbD0iIzI0MTAzMyIvPgo8cG9seWdvbiBwb2ludHM9IjAsMTYgMTAsMTQgMTgsMTYgMTQsMzAgMCwzMiIgZmlsbD0iIzBkMDcxNCIvPgo8cG9seWdvbiBwb2ludHM9IjE4LDE2IDM0LDI2IDMwLDQwIDE0LDMwIiBmaWxsPSIjMWIxMDI2Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMzQsMjYgNDgsMjQgNDgsNDAgMzAsNDAiIGZpbGw9IiMwZDA3MTQiLz4KPHBvbHlnb24gcG9pbnRzPSIwLDMyIDE0LDMwIDEyLDQ4IDAsNDgiIGZpbGw9IiMyNDEwMzMiLz4KPHBvbHlnb24gcG9pbnRzPSIxNCwzMCAzMCw0MCAyNiw0OCAxMiw0OCIgZmlsbD0iIzBkMDcxNCIvPgo8cG9seWdvbiBwb2ludHM9IjMwLDQwIDQ4LDQwIDQ4LDQ4IDI2LDQ4IiBmaWxsPSIjMWIxMDI2Ii8+CjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIxLjQiIGZpbGw9IiMzZDFhNWMiLz4KPGNpcmNsZSBjeD0iMzgiIGN5PSIxNyIgcj0iMS4xIiBmaWxsPSIjM2QxYTVjIi8+CjxjaXJjbGUgY3g9IjIyIiBjeT0iMzQiIHI9IjEuMyIgZmlsbD0iIzNkMWE1YyIvPgo8Y2lyY2xlIGN4PSI0MSIgY3k9IjQ0IiByPSIxIiBmaWxsPSIjM2QxYTVjIi8+Cjwvc3ZnPg==");
     background-size: 48px 48px;
     background-repeat: repeat;
@@ -249,7 +249,7 @@ button:hover {
 
 .portal-center {
     width: 100px;
-    height: 195px;
+    height: 180px;
     background: radial-gradient(circle at 50% 50%, #7b2cff 0%, #3F1187 100%);
     border-radius: 3px;
     display: flex;
@@ -387,20 +387,23 @@ body.mobile-mode .portal-card {
 
 body.mobile-mode .portal-frame {
     width: 90px;
-    height: 150px;
+    height: 195px;
     background-size: 32px 32px;
 }
 
 body.mobile-mode .portal-center {
     width: 66px;
-    height: 126px;
+    height: 165px;
     padding-top: 8px;
 }
 
 body.mobile-mode .copy-btn {
-    font-size: 8px;
-    padding: 2px 6px;
-    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    line-height: 14px;
+    top: 4px;
+    right: 4px;
 }
 
 body.mobile-mode .portal-name {
@@ -442,8 +445,13 @@ body.mobile-mode .tool-hint {
 /* Tools card */
 
 .tools-card {
-    width: min(90%, 450px);
+    width: min(95%, 1100px);
     margin: 20px auto 0;
+}
+
+.tab-panel:not(#panel-grid) {
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .tab-bar {
@@ -534,20 +542,26 @@ body.mobile-mode .tool-hint {
 /* Per-portal copy button */
 
 .copy-btn {
-    margin-top: 8px;
-    padding: 3px 10px;
-    font-size: 10px;
-    background: rgba(255, 255, 255, .15);
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+    background: rgba(0, 0, 0, .45);
     color: white;
     border: 1px solid rgba(255, 255, 255, .4);
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .copy-btn:hover {
-    background: rgba(255, 255, 255, .3);
+    background: rgba(0, 0, 0, .7);
 }
 
 /* Highlighted portal (search / nearest-portal result) */
