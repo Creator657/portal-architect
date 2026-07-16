@@ -282,9 +282,9 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
 
         </div>
 
-        <button type="button" class="copy-btn">Copy</button>
-
     </div>
+
+    <button type="button" class="copy-btn" aria-label="Copy coordinates">📋</button>
 
 </div>
 `;
@@ -297,16 +297,15 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
 
                 navigator.clipboard.writeText(text)
                     .then(function () {
-                        const original = copyBtn.textContent;
-                        copyBtn.textContent = "Copied!";
+                        copyBtn.textContent = "✅";
                         setTimeout(function () {
-                            copyBtn.textContent = original;
+                            copyBtn.textContent = "📋";
                         }, 1400);
                     })
                     .catch(function () {
-                        copyBtn.textContent = "Failed";
+                        copyBtn.textContent = "❌";
                         setTimeout(function () {
-                            copyBtn.textContent = "Copy";
+                            copyBtn.textContent = "📋";
                         }, 1400);
                     });
             });
