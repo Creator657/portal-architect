@@ -143,6 +143,48 @@ Edit Coordinates
 
 <footer id="commitFooter" style="text-align:center; padding:20px; color:#8a6fa8; font-size:13px;"></footer>
 
+<button id="howToBtn" class="fab how-to-btn" type="button" title="How to use">❓</button>
+
+<div id="howToModal" class="modal-overlay" hidden>
+    <div class="modal-box">
+        <button id="howToCloseBtn" class="modal-close" type="button" aria-label="Close">✕</button>
+
+        <h2>How to Use Portal Architect</h2>
+
+        <h3>1. Set your Mother Portal</h3>
+        <p>Enter your current Overworld X and Z, pick a Grid Radius (how many portals out in each direction), then click Generate Grid. This locks in your coordinates and builds the network.</p>
+
+        <h3>2. Reading portal names</h3>
+        <p>The Mother Portal is always named <strong>M</strong>. Every other portal is named by direction and distance from it, like <strong>N3E2</strong> (3 north, 2 east) or <strong>S1W4</strong> (1 south, 4 west).</p>
+
+        <h3>3. Search &amp; Nearest tools</h3>
+        <p><strong>Portal names are case-sensitive.</strong> Searching <strong>n3e2</strong> will not find <strong>N3E2</strong> — match the capitalization exactly, including the "M" for Mother Portal. If you've given a portal a custom name, that match is case-sensitive too.</p>
+
+        <h3>4. Distance &amp; Slot Finder</h3>
+        <p>Distance Calculator works between any two Overworld points, no grid needed. Slot Finder tells you the nearest portal position for any coordinate, even one you haven't generated yet.</p>
+
+        <h3>5. Selecting a portal</h3>
+        <p>Click any portal card to select it (gold outline). With one selected, use the floating buttons in the bottom-right corner: <strong>✏️</strong> to give it a custom name, <strong>📋</strong> to copy its coordinates.</p>
+
+        <h3>6. Themes &amp; phone view</h3>
+        <p>Use <strong>🖌️</strong> to switch between Nether, Overworld, and Deep Dark themes. The toggle near the top switches to a phone-optimized layout.</p>
+
+        <h3>Starting over</h3>
+        <p>Click Edit Coordinates on the Mother Portal card to unlock it and generate a fresh grid. This clears the current grid, any custom names, and your selection.</p>
+    </div>
+</div>
+
+<button id="renameMenuBtn" class="fab rename-menu-btn" type="button" disabled title="Select a portal first">✏️</button>
+
+<div id="renameMenu" class="theme-menu rename-menu" hidden>
+    <p class="rename-menu-label">Custom name for <span id="renameTargetName"></span></p>
+    <input id="renameInput" type="text" placeholder="e.g. Base Camp" maxlength="24">
+    <div class="rename-menu-actions">
+        <button type="button" id="renameSaveBtn" class="tool-btn">Save</button>
+        <button type="button" id="renameClearBtn" class="tool-btn rename-clear-btn">Clear</button>
+    </div>
+</div>
+
 <button id="globalCopyBtn" class="fab" type="button" disabled title="Select a portal first">📋</button>
 
 <button id="themeMenuBtn" class="fab theme-menu-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Change theme">🖌️</button>
