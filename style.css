@@ -637,6 +637,104 @@ body.mobile-mode .tool-hint {
     box-shadow: 0 4px 20px rgba(200, 108, 255, .6);
 }
 
+.how-to-btn {
+    left: 20px;
+    right: auto;
+}
+
+body.mobile-mode .how-to-btn {
+    left: 14px;
+    right: auto;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1500;
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .7);
+}
+
+.modal-box h2 {
+    color: var(--title-color);
+    margin: 0 0 4px;
+    font-size: 22px;
+}
+
+.modal-box h3 {
+    color: var(--subtitle-color);
+    font-size: 15px;
+    margin: 18px 0 6px;
+}
+
+.modal-box p {
+    font-size: 13px;
+    color: var(--tool-hint-color);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.modal-box strong {
+    color: var(--title-color);
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .1);
+    color: white;
+    border: 1px solid var(--card-border);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    transform: none;
+    background: rgba(255, 255, 255, .2);
+}
+
+body.mobile-mode .modal-box {
+    padding: 22px 18px;
+}
+
+body.mobile-mode .modal-box h2 {
+    font-size: 19px;
+}
+
+body.mobile-mode .modal-box h3 {
+    font-size: 14px;
+}
+
+body.mobile-mode .modal-box p {
+    font-size: 12px;
+}
+
 #globalCopyBtn {
     right: 82px;
 }
@@ -648,6 +746,20 @@ body.mobile-mode .tool-hint {
 }
 
 #globalCopyBtn:disabled:hover {
+    transform: none;
+}
+
+.rename-menu-btn {
+    right: 144px;
+}
+
+#renameMenuBtn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .4);
+}
+
+#renameMenuBtn:disabled:hover {
     transform: none;
 }
 
@@ -699,6 +811,50 @@ body.mobile-mode .tool-hint {
     color: white;
 }
 
+.rename-menu {
+    right: 144px;
+    min-width: 220px;
+    padding: 14px;
+}
+
+.rename-menu-label {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--subtitle-color);
+}
+
+.rename-menu-label span {
+    color: var(--title-color);
+    font-weight: bold;
+}
+
+#renameInput {
+    margin-top: 0;
+}
+
+.rename-menu-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.rename-menu-actions .tool-btn {
+    margin-top: 0;
+}
+
+.rename-clear-btn {
+    background: transparent;
+    color: var(--subtitle-color);
+    border: 1px solid var(--card-border);
+}
+
+.portal-auto-name {
+    font-size: 9px;
+    font-weight: normal;
+    opacity: .75;
+    margin-top: 2px;
+}
+
 body.mobile-mode .fab {
     width: 44px;
     height: 44px;
@@ -708,6 +864,15 @@ body.mobile-mode .fab {
 
 body.mobile-mode #globalCopyBtn {
     right: 66px;
+}
+
+body.mobile-mode .rename-menu-btn {
+    right: 118px;
+}
+
+body.mobile-mode .rename-menu {
+    right: 118px;
+    bottom: 66px;
 }
 
 body.mobile-mode .theme-menu-btn {
