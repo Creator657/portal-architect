@@ -253,6 +253,12 @@ function findCardByOffset(x, z) {
 // rebuilt via Edit Coordinates, same as selection.
 let customNames = {};
 
+function getCustomNameFontSize(length) {
+    if (length <= 6) return "20px";
+    if (length <= 9) return "16px";
+    return "13px";
+}
+
 function refreshCardName(card) {
     const key = card.dataset.x + "," + card.dataset.z;
     const customName = customNames[key];
@@ -261,7 +267,9 @@ function refreshCardName(card) {
 
     if (customName) {
         card.dataset.customName = customName;
-        nameEl.innerHTML = customName + '<div class="portal-auto-name">' + autoName + "</div>";
+        const fontSize = getCustomNameFontSize(customName.length);
+        nameEl.innerHTML = '<span style="font-size:' + fontSize + '">' + customName + '</span>' +
+            '<div class="portal-auto-name">' + autoName + "</div>";
     } else {
         delete card.dataset.customName;
         nameEl.textContent = autoName;
