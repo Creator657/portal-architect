@@ -78,6 +78,30 @@ mobileToggle.addEventListener("change", function () {
     document.body.classList.toggle("mobile-mode", mobileToggle.checked);
 });
 
+const howToBtn = document.getElementById("howToBtn");
+const howToModal = document.getElementById("howToModal");
+const howToCloseBtn = document.getElementById("howToCloseBtn");
+
+howToBtn.addEventListener("click", function () {
+    howToModal.hidden = false;
+});
+
+howToCloseBtn.addEventListener("click", function () {
+    howToModal.hidden = true;
+});
+
+howToModal.addEventListener("click", function (event) {
+    if (event.target === howToModal) {
+        howToModal.hidden = true;
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !howToModal.hidden) {
+        howToModal.hidden = true;
+    }
+});
+
 const themeMenuBtn = document.getElementById("themeMenuBtn");
 const themeMenu = document.getElementById("themeMenu");
 const themeMenuItems = Array.from(document.querySelectorAll(".theme-menu-item"));
@@ -215,7 +239,7 @@ function highlightCard(card) {
 
 function findCardByName(name) {
     return Array.from(document.querySelectorAll(".portal-card")).find(function (card) {
-        return card.dataset.portalName === name;
+        return card.dataset.portalName === name || card.dataset.customName === name;
     }) || null;
 }
 
@@ -223,6 +247,25 @@ function findCardByOffset(x, z) {
     return Array.from(document.querySelectorAll(".portal-card")).find(function (card) {
         return Number(card.dataset.x) === x && Number(card.dataset.z) === z;
     }) || null;
+}
+
+// Custom names, keyed by "x,z". Session-only — cleared whenever the grid is
+// rebuilt via Edit Coordinates, same as selection.
+let customNames = {};
+
+function refreshCardName(card) {
+    const key = card.dataset.x + "," + card.dataset.z;
+    const customName = customNames[key];
+    const nameEl = card.querySelector(".portal-name");
+    const autoName = card.dataset.portalName;
+
+    if (customName) {
+        card.dataset.customName = customName;
+        nameEl.innerHTML = customName + '<div class="portal-auto-name">' + autoName + "</div>";
+    } else {
+        delete card.dataset.customName;
+        nameEl.textContent = autoName;
+    }
 }
 
 // --- Portal selection + global copy button ----------------------------------
@@ -239,6 +282,7 @@ function selectPortal(card) {
 
     selectedPortal = {
         name: card.dataset.portalName,
+        customName: card.dataset.customName || null,
         overworldX: Number(card.dataset.overworldX),
         overworldZ: Number(card.dataset.overworldZ),
         netherX: Number(card.dataset.netherX),
@@ -246,7 +290,10 @@ function selectPortal(card) {
     };
 
     globalCopyBtn.disabled = false;
-    globalCopyBtn.title = "Copy " + selectedPortal.name;
+    globalCopyBtn.title = "Copy " + (selectedPortal.customName || selectedPortal.name);
+
+    renameMenuBtn.disabled = false;
+    renameMenuBtn.title = "Rename " + (selectedPortal.customName || selectedPortal.name);
 }
 
 function clearSelectedPortal() {
@@ -257,6 +304,10 @@ function clearSelectedPortal() {
     selectedPortal = null;
     globalCopyBtn.disabled = true;
     globalCopyBtn.title = "Select a portal first";
+
+    renameMenuBtn.disabled = true;
+    renameMenuBtn.title = "Select a portal first";
+    renameMenu.hidden = true;
 }
 
 globalCopyBtn.addEventListener("click", function () {
@@ -264,7 +315,9 @@ globalCopyBtn.addEventListener("click", function () {
         return;
     }
 
-    const text = "Overworld " + selectedPortal.overworldX + ", " + selectedPortal.overworldZ +
+    const label = selectedPortal.customName ? selectedPortal.customName + " (" + selectedPortal.name + ")" : selectedPortal.name;
+
+    const text = label + " | Overworld " + selectedPortal.overworldX + ", " + selectedPortal.overworldZ +
         " | Nether " + selectedPortal.netherX + ", " + selectedPortal.netherZ;
 
     navigator.clipboard.writeText(text)
@@ -280,6 +333,69 @@ globalCopyBtn.addEventListener("click", function () {
                 globalCopyBtn.textContent = "📋";
             }, 1400);
         });
+});
+
+// --- Rename (custom names) --------------------------------------------------
+
+const renameMenuBtn = document.getElementById("renameMenuBtn");
+const renameMenu = document.getElementById("renameMenu");
+const renameTargetName = document.getElementById("renameTargetName");
+const renameInput = document.getElementById("renameInput");
+const renameSaveBtn = document.getElementById("renameSaveBtn");
+const renameClearBtn = document.getElementById("renameClearBtn");
+
+renameMenuBtn.addEventListener("click", function (event) {
+    event.stopPropagation();
+
+    if (selectedPortal === null) {
+        return;
+    }
+
+    const isOpen = !renameMenu.hidden;
+    if (isOpen) {
+        renameMenu.hidden = true;
+        return;
+    }
+
+    renameTargetName.textContent = selectedPortal.name;
+    renameInput.value = selectedPortal.customName || "";
+    renameMenu.hidden = false;
+    renameInput.focus();
+});
+
+renameSaveBtn.addEventListener("click", function () {
+    if (selectedPortal === null) {
+        return;
+    }
+
+    const card = document.querySelector(".portal-card.selected-portal");
+    if (!card) {
+        return;
+    }
+
+    const value = renameInput.value.trim();
+    const key = card.dataset.x + "," + card.dataset.z;
+
+    if (value === "") {
+        delete customNames[key];
+    } else {
+        customNames[key] = value;
+    }
+
+    refreshCardName(card);
+    selectPortal(card); // refresh selectedPortal + button titles with the new name
+    renameMenu.hidden = true;
+});
+
+renameClearBtn.addEventListener("click", function () {
+    renameInput.value = "";
+    renameSaveBtn.click();
+});
+
+document.addEventListener("click", function (event) {
+    if (!renameMenu.hidden && !renameMenu.contains(event.target) && event.target !== renameMenuBtn) {
+        renameMenu.hidden = true;
+    }
 });
 
 // --- Tab switching ---------------------------------------------------------
@@ -391,6 +507,8 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
 </div>
 `;
 
+            refreshCardName(card);
+
             card.addEventListener("click", function () {
                 selectPortal(card);
             });
@@ -428,6 +546,7 @@ editCoordsBtn.addEventListener("click", function () {
     resetLoadingUI();
     document.getElementById("results").innerHTML = "";
     clearSelectedPortal();
+    customNames = {};
     activateTab("grid");
     errorEl.textContent = "";
     noticeEl.textContent = "";
