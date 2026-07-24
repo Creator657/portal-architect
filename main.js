@@ -167,7 +167,8 @@ const tabPanels = {
     search: document.getElementById("panel-search"),
     nearest: document.getElementById("panel-nearest"),
     distance: document.getElementById("panel-distance"),
-    slot: document.getElementById("panel-slot")
+    slot: document.getElementById("panel-slot"),
+    save: document.getElementById("panel-save")
 };
 
 function showError(message) {
@@ -276,6 +277,109 @@ function refreshCardName(card) {
     }
 }
 
+// --- Categories / tags ------------------------------------------------------
+// Session-only, same lifecycle as custom names — cleared on Edit Coordinates.
+
+const CATEGORIES = [
+    { id: "base", label: "Base", color: "#4caf50" },
+    { id: "mining", label: "Mining", color: "#8d6e63" },
+    { id: "farm", label: "Farm", color: "#cddc39" },
+    { id: "trading", label: "Trading", color: "#ffb300" },
+    { id: "hub", label: "Nether Hub", color: "#e91e63" }
+];
+
+function getCategoryById(id) {
+    return CATEGORIES.find(function (cat) {
+        return cat.id === id;
+    }) || null;
+}
+
+let portalCategories = {};
+
+function refreshCardCategory(card) {
+    const key = card.dataset.x + "," + card.dataset.z;
+    const categoryId = portalCategories[key];
+    const frame = card.querySelector(".portal-frame");
+    let dot = frame.querySelector(".portal-category-dot");
+
+    if (categoryId) {
+        const category = getCategoryById(categoryId);
+        card.dataset.category = categoryId;
+        if (!dot) {
+            dot = document.createElement("span");
+            dot.className = "portal-category-dot";
+            frame.appendChild(dot);
+        }
+        dot.style.background = category.color;
+        dot.title = category.label;
+    } else {
+        delete card.dataset.category;
+        if (dot) {
+            dot.remove();
+        }
+    }
+}
+
+// --- Portal status + notes --------------------------------------------------
+// Same session-only lifecycle as names and categories.
+
+const STATUSES = [
+    { id: "planned", label: "Planned", color: "#42a5f5" },
+    { id: "in-progress", label: "In Progress", color: "#ff9800" },
+    { id: "built", label: "Built", color: "#4caf50" }
+];
+
+function getStatusById(id) {
+    return STATUSES.find(function (s) {
+        return s.id === id;
+    }) || null;
+}
+
+let portalStatuses = {};
+let portalNotes = {};
+
+function refreshCardDetails(card) {
+    const key = card.dataset.x + "," + card.dataset.z;
+    const frame = card.querySelector(".portal-frame");
+
+    const statusId = portalStatuses[key];
+    let statusDot = frame.querySelector(".portal-status-dot");
+    if (statusId) {
+        const status = getStatusById(statusId);
+        card.dataset.status = statusId;
+        if (!statusDot) {
+            statusDot = document.createElement("span");
+            statusDot.className = "portal-status-dot";
+            frame.appendChild(statusDot);
+        }
+        statusDot.style.background = status.color;
+        statusDot.title = status.label;
+    } else {
+        delete card.dataset.status;
+        if (statusDot) {
+            statusDot.remove();
+        }
+    }
+
+    const note = portalNotes[key];
+    let notesIcon = frame.querySelector(".portal-notes-icon");
+    if (note) {
+        card.dataset.notes = note;
+        if (!notesIcon) {
+            notesIcon = document.createElement("span");
+            notesIcon.className = "portal-notes-icon";
+            notesIcon.textContent = "📝";
+            frame.appendChild(notesIcon);
+        }
+        notesIcon.title = note;
+    } else {
+        delete card.dataset.notes;
+        if (notesIcon) {
+            notesIcon.remove();
+        }
+    }
+}
+
 // --- Portal selection + global copy button ----------------------------------
 
 const globalCopyBtn = document.getElementById("globalCopyBtn");
@@ -291,6 +395,9 @@ function selectPortal(card) {
     selectedPortal = {
         name: card.dataset.portalName,
         customName: card.dataset.customName || null,
+        categoryId: card.dataset.category || null,
+        statusId: card.dataset.status || null,
+        notes: card.dataset.notes || "",
         overworldX: Number(card.dataset.overworldX),
         overworldZ: Number(card.dataset.overworldZ),
         netherX: Number(card.dataset.netherX),
@@ -301,7 +408,10 @@ function selectPortal(card) {
     globalCopyBtn.title = "Copy " + (selectedPortal.customName || selectedPortal.name);
 
     renameMenuBtn.disabled = false;
-    renameMenuBtn.title = "Rename " + (selectedPortal.customName || selectedPortal.name);
+    renameMenuBtn.title = "Edit details for " + (selectedPortal.customName || selectedPortal.name);
+
+    tagMenuBtn.disabled = false;
+    tagMenuBtn.title = "Tag " + (selectedPortal.customName || selectedPortal.name);
 }
 
 function clearSelectedPortal() {
@@ -316,6 +426,10 @@ function clearSelectedPortal() {
     renameMenuBtn.disabled = true;
     renameMenuBtn.title = "Select a portal first";
     renameMenu.hidden = true;
+
+    tagMenuBtn.disabled = true;
+    tagMenuBtn.title = "Select a portal first";
+    tagMenu.hidden = true;
 }
 
 globalCopyBtn.addEventListener("click", function () {
@@ -324,8 +438,10 @@ globalCopyBtn.addEventListener("click", function () {
     }
 
     const label = selectedPortal.customName ? selectedPortal.customName + " (" + selectedPortal.name + ")" : selectedPortal.name;
+    const category = selectedPortal.categoryId ? getCategoryById(selectedPortal.categoryId) : null;
+    const categoryText = category ? " [" + category.label + "]" : "";
 
-    const text = label + " | Overworld " + selectedPortal.overworldX + ", " + selectedPortal.overworldZ +
+    const text = label + categoryText + " | Overworld " + selectedPortal.overworldX + ", " + selectedPortal.overworldZ +
         " | Nether " + selectedPortal.netherX + ", " + selectedPortal.netherZ;
 
     navigator.clipboard.writeText(text)
@@ -343,12 +459,14 @@ globalCopyBtn.addEventListener("click", function () {
         });
 });
 
-// --- Rename (custom names) --------------------------------------------------
+// --- Rename / details panel (name, status, notes) ---------------------------
 
 const renameMenuBtn = document.getElementById("renameMenuBtn");
 const renameMenu = document.getElementById("renameMenu");
 const renameTargetName = document.getElementById("renameTargetName");
 const renameInput = document.getElementById("renameInput");
+const statusSelect = document.getElementById("statusSelect");
+const notesInput = document.getElementById("notesInput");
 const renameSaveBtn = document.getElementById("renameSaveBtn");
 const renameClearBtn = document.getElementById("renameClearBtn");
 
@@ -367,6 +485,8 @@ renameMenuBtn.addEventListener("click", function (event) {
 
     renameTargetName.textContent = selectedPortal.name;
     renameInput.value = selectedPortal.customName || "";
+    statusSelect.value = selectedPortal.statusId || "";
+    notesInput.value = selectedPortal.notes || "";
     renameMenu.hidden = false;
     renameInput.focus();
 });
@@ -381,28 +501,101 @@ renameSaveBtn.addEventListener("click", function () {
         return;
     }
 
-    const value = renameInput.value.trim();
     const key = card.dataset.x + "," + card.dataset.z;
 
-    if (value === "") {
+    const nameValue = renameInput.value.trim();
+    if (nameValue === "") {
         delete customNames[key];
     } else {
-        customNames[key] = value;
+        customNames[key] = nameValue;
+    }
+
+    const statusValue = statusSelect.value;
+    if (statusValue === "") {
+        delete portalStatuses[key];
+    } else {
+        portalStatuses[key] = statusValue;
+    }
+
+    const notesValue = notesInput.value.trim();
+    if (notesValue === "") {
+        delete portalNotes[key];
+    } else {
+        portalNotes[key] = notesValue;
     }
 
     refreshCardName(card);
-    selectPortal(card); // refresh selectedPortal + button titles with the new name
+    refreshCardDetails(card);
+    selectPortal(card); // refresh selectedPortal + button titles with the new data
     renameMenu.hidden = true;
 });
 
 renameClearBtn.addEventListener("click", function () {
     renameInput.value = "";
+    statusSelect.value = "";
+    notesInput.value = "";
     renameSaveBtn.click();
 });
 
 document.addEventListener("click", function (event) {
     if (!renameMenu.hidden && !renameMenu.contains(event.target) && event.target !== renameMenuBtn) {
         renameMenu.hidden = true;
+    }
+});
+
+// --- Tag / category picker ---------------------------------------------------
+
+const tagMenuBtn = document.getElementById("tagMenuBtn");
+const tagMenu = document.getElementById("tagMenu");
+
+tagMenuBtn.addEventListener("click", function (event) {
+    event.stopPropagation();
+
+    if (selectedPortal === null) {
+        return;
+    }
+
+    const isOpen = !tagMenu.hidden;
+    if (isOpen) {
+        tagMenu.hidden = true;
+        return;
+    }
+
+    Array.from(tagMenu.querySelectorAll(".tag-menu-item")).forEach(function (item) {
+        item.classList.toggle("active", item.dataset.category === selectedPortal.categoryId);
+    });
+
+    tagMenu.hidden = false;
+});
+
+tagMenu.addEventListener("click", function (event) {
+    const item = event.target.closest(".tag-menu-item");
+    if (!item || selectedPortal === null) {
+        return;
+    }
+
+    const card = document.querySelector(".portal-card.selected-portal");
+    if (!card) {
+        return;
+    }
+
+    const key = card.dataset.x + "," + card.dataset.z;
+    const categoryId = item.dataset.category;
+
+    if (categoryId === "none") {
+        delete portalCategories[key];
+    } else {
+        portalCategories[key] = categoryId;
+    }
+
+    refreshCardCategory(card);
+    selectPortal(card);
+    tagMenu.hidden = true;
+});
+
+document.addEventListener("click", function (event) {
+    if (!tagMenu.hidden && !tagMenu.contains(event.target) && event.target !== tagMenuBtn) {
+        tagMenu.hidden = true;
     }
 });
 
@@ -516,6 +709,8 @@ function buildGrid(overworldX, overworldZ, radius, netherX, netherZ) {
 `;
 
             refreshCardName(card);
+            refreshCardCategory(card);
+            refreshCardDetails(card);
 
             card.addEventListener("click", function () {
                 selectPortal(card);
@@ -546,7 +741,7 @@ function unlockMotherCard() {
     editCoordsBtn.style.display = "none";
 }
 
-editCoordsBtn.addEventListener("click", function () {
+function resetGridState() {
     unlockMotherCard();
     motherAnchor = null;
     toolsSection.style.display = "none";
@@ -555,10 +750,15 @@ editCoordsBtn.addEventListener("click", function () {
     document.getElementById("results").innerHTML = "";
     clearSelectedPortal();
     customNames = {};
+    portalCategories = {};
+    portalStatuses = {};
+    portalNotes = {};
     activateTab("grid");
     errorEl.textContent = "";
     noticeEl.textContent = "";
-});
+}
+
+editCoordsBtn.addEventListener("click", resetGridState);
 
 // --- Radius live rounding notice ---------------------------------------------
 
@@ -588,47 +788,7 @@ radiusField.addEventListener("input", function () {
 
 // --- Generate: validate, then run the staged loading sequence ----------------
 
-generateBtn.addEventListener("click", async function () {
-
-    errorEl.textContent = "";
-    noticeEl.textContent = "";
-
-    const overworldXInput = motherXInput.value.trim();
-    const overworldZInput = motherZInput.value.trim();
-    const radiusInput = radiusField.value.trim();
-
-    if (overworldXInput === "" || overworldZInput === "" || radiusInput === "") {
-        showError("Please fill in Overworld X, Overworld Z, and Grid Radius.");
-        return;
-    }
-
-    const overworldX = Number(overworldXInput);
-    const overworldZ = Number(overworldZInput);
-    let radius = Number(radiusInput);
-
-    if (Number.isNaN(overworldX) || Number.isNaN(overworldZ) || Number.isNaN(radius)) {
-        showError("Coordinates and radius must be numbers.");
-        return;
-    }
-
-    const truncatedRadius = Math.trunc(radius);
-
-    if (truncatedRadius !== radius) {
-        showNotice("Rounding radius to " + truncatedRadius + ".");
-    }
-
-    radius = truncatedRadius;
-
-    if (radius < 1) {
-        showError("Grid radius must be at least 1.");
-        return;
-    }
-
-    if (radius > 15) {
-        showError("Maximum grid radius is 15 for performance.");
-        return;
-    }
-
+async function runGenerateSequence(overworldX, overworldZ, radius) {
     generateBtn.disabled = true;
     loadingContainer.style.display = "block";
     resetLoadingUI();
@@ -684,15 +844,62 @@ generateBtn.addEventListener("click", async function () {
         toolsSection.style.display = "block";
         activateTab("grid");
 
+        return true;
+
     } catch (err) {
         loadingStatus.textContent = "Failed to generate the grid. Please try again.";
         loadingStatus.style.color = "#ff8a8a";
         motherAnchor = null;
         toolsSection.style.display = "none";
         console.error("Grid generation failed:", err);
+        return false;
     } finally {
         generateBtn.disabled = false;
     }
+}
+
+generateBtn.addEventListener("click", async function () {
+
+    errorEl.textContent = "";
+    noticeEl.textContent = "";
+
+    const overworldXInput = motherXInput.value.trim();
+    const overworldZInput = motherZInput.value.trim();
+    const radiusInput = radiusField.value.trim();
+
+    if (overworldXInput === "" || overworldZInput === "" || radiusInput === "") {
+        showError("Please fill in Overworld X, Overworld Z, and Grid Radius.");
+        return;
+    }
+
+    const overworldX = Number(overworldXInput);
+    const overworldZ = Number(overworldZInput);
+    let radius = Number(radiusInput);
+
+    if (Number.isNaN(overworldX) || Number.isNaN(overworldZ) || Number.isNaN(radius)) {
+        showError("Coordinates and radius must be numbers.");
+        return;
+    }
+
+    const truncatedRadius = Math.trunc(radius);
+
+    if (truncatedRadius !== radius) {
+        showNotice("Rounding radius to " + truncatedRadius + ".");
+    }
+
+    radius = truncatedRadius;
+
+    if (radius < 1) {
+        showError("Grid radius must be at least 1.");
+        return;
+    }
+
+    if (radius > 15) {
+        showError("Maximum grid radius is 15 for performance.");
+        return;
+    }
+
+    await runGenerateSequence(overworldX, overworldZ, radius);
 });
 
 // --- Tool 1: Search portal by name --------------------------------------
@@ -863,4 +1070,121 @@ slotBtn.addEventListener("click", function () {
         "Overworld: " + nearest.overworldX + ", " + nearest.overworldZ + "<br>" +
         "Nether: " + nearest.netherX + ", " + nearest.netherZ + "<br>" +
         "≈" + distanceBlocks + " Overworld blocks from what you typed";
+});
+
+// --- Tool 6: Save / Load (shareable codes) -----------------------------
+// Manual, session-scoped: a code is text you copy out and paste back in
+// yourself — nothing is auto-saved or stored in the browser.
+
+function encodeState(stateObj) {
+    const json = JSON.stringify(stateObj);
+    return btoa(unescape(encodeURIComponent(json)));
+}
+
+function decodeState(code) {
+    const json = decodeURIComponent(escape(atob(code)));
+    return JSON.parse(json);
+}
+
+const exportBtn = document.getElementById("exportBtn");
+const exportOutput = document.getElementById("exportOutput");
+const exportCopyBtn = document.getElementById("exportCopyBtn");
+const exportStatus = document.getElementById("exportStatus");
+
+const importInput = document.getElementById("importInput");
+const importBtn = document.getElementById("importBtn");
+const importStatus = document.getElementById("importStatus");
+
+exportBtn.addEventListener("click", function () {
+    exportStatus.textContent = "";
+
+    if (motherAnchor === null) {
+        exportStatus.style.color = "#ff8a8a";
+        exportStatus.textContent = "Generate a grid first.";
+        return;
+    }
+
+    const state = {
+        overworldX: motherAnchor.overworldX,
+        overworldZ: motherAnchor.overworldZ,
+        radius: motherAnchor.radius,
+        customNames: customNames,
+        portalCategories: portalCategories,
+        portalStatuses: portalStatuses,
+        portalNotes: portalNotes
+    };
+
+    exportOutput.value = encodeState(state);
+    exportStatus.style.color = "#8a6fa8";
+    exportStatus.textContent = "Code generated below.";
+});
+
+exportCopyBtn.addEventListener("click", function () {
+    if (exportOutput.value === "") {
+        return;
+    }
+    navigator.clipboard.writeText(exportOutput.value)
+        .then(function () {
+            exportStatus.style.color = "#8a6fa8";
+            exportStatus.textContent = "Copied to clipboard.";
+        })
+        .catch(function () {
+            exportStatus.style.color = "#ff8a8a";
+            exportStatus.textContent = "Couldn't copy — select and copy manually.";
+        });
+});
+
+importBtn.addEventListener("click", async function () {
+    importStatus.textContent = "";
+
+    const code = importInput.value.trim();
+    if (code === "") {
+        importStatus.style.color = "#ff8a8a";
+        importStatus.textContent = "Paste a code first.";
+        return;
+    }
+
+    let data;
+    try {
+        data = decodeState(code);
+    } catch (err) {
+        importStatus.style.color = "#ff8a8a";
+        importStatus.textContent = "That code isn't valid.";
+        return;
+    }
+
+    if (typeof data.overworldX !== "number" || typeof data.overworldZ !== "number" || typeof data.radius !== "number") {
+        importStatus.style.color = "#ff8a8a";
+        importStatus.textContent = "That code is missing required data.";
+        return;
+    }
+
+    resetGridState();
+
+    motherXInput.value = data.overworldX;
+    motherZInput.value = data.overworldZ;
+    radiusField.value = data.radius;
+
+    const success = await runGenerateSequence(data.overworldX, data.overworldZ, data.radius);
+
+    if (!success) {
+        importStatus.style.color = "#ff8a8a";
+        importStatus.textContent = "Failed to rebuild the grid from that code.";
+        return;
+    }
+
+    customNames = data.customNames || {};
+    portalCategories = data.portalCategories || {};
+    portalStatuses = data.portalStatuses || {};
+    portalNotes = data.portalNotes || {};
+
+    Array.from(document.querySelectorAll(".portal-card")).forEach(function (card) {
+        refreshCardName(card);
+        refreshCardCategory(card);
+        refreshCardDetails(card);
+    });
+
+    activateTab("save");
+    importStatus.style.color = "#8a6fa8";
+    importStatus.textContent = "Loaded successfully.";
 });
