@@ -89,6 +89,7 @@ Edit Coordinates
     <button class="tab-btn" data-tab="nearest" type="button">Nearest</button>
     <button class="tab-btn" data-tab="distance" type="button">Distance</button>
     <button class="tab-btn" data-tab="slot" type="button">Slot Finder</button>
+    <button class="tab-btn" data-tab="save" type="button">Save/Load</button>
 </div>
 
 <div class="tab-panel" id="panel-grid">
@@ -136,7 +137,23 @@ Edit Coordinates
     <div id="slotResult" class="tool-result"></div>
 </div>
 
+<div class="tab-panel" id="panel-save" hidden>
+    <h3>Export a Save Code</h3>
+    <p class="tool-hint">Turns your Mother Portal, names, tags, statuses, and notes into a text code you can copy and keep — paste it back in later to rebuild everything exactly as it was.</p>
+    <button id="exportBtn" class="tool-btn" type="button">Generate Code</button>
+    <textarea id="exportOutput" class="save-code-box" readonly rows="3" placeholder="Your code will appear here"></textarea>
+    <button id="exportCopyBtn" class="tool-btn" type="button">Copy Code</button>
+    <p id="exportStatus" class="tool-status"></p>
+
+    <h3 style="margin-top:22px;">Import a Save Code</h3>
+    <p class="tool-hint">Paste a code below to rebuild that network. This replaces the current grid.</p>
+    <textarea id="importInput" class="save-code-box" rows="3" placeholder="Paste a save code here"></textarea>
+    <button id="importBtn" class="tool-btn" type="button">Load Code</button>
+    <p id="importStatus" class="tool-status"></p>
+</div>
+
 </section>
+
 
 
 </main>
@@ -174,14 +191,32 @@ Edit Coordinates
     </div>
 </div>
 
+<button id="tagMenuBtn" class="fab tag-menu-btn" type="button" disabled title="Select a portal first">🏷️</button>
+
+<div id="tagMenu" class="theme-menu tag-menu" hidden>
+    <button type="button" class="tag-menu-item" data-category="base"><span class="tag-dot" style="background:#4caf50"></span>Base</button>
+    <button type="button" class="tag-menu-item" data-category="mining"><span class="tag-dot" style="background:#8d6e63"></span>Mining</button>
+    <button type="button" class="tag-menu-item" data-category="farm"><span class="tag-dot" style="background:#cddc39"></span>Farm</button>
+    <button type="button" class="tag-menu-item" data-category="trading"><span class="tag-dot" style="background:#ffb300"></span>Trading</button>
+    <button type="button" class="tag-menu-item" data-category="hub"><span class="tag-dot" style="background:#e91e63"></span>Nether Hub</button>
+    <button type="button" class="tag-menu-item tag-menu-clear" data-category="none">Clear tag</button>
+</div>
+
 <button id="renameMenuBtn" class="fab rename-menu-btn" type="button" disabled title="Select a portal first">✏️</button>
 
 <div id="renameMenu" class="theme-menu rename-menu" hidden>
-    <p class="rename-menu-label">Custom name for <span id="renameTargetName"></span></p>
-    <input id="renameInput" type="text" placeholder="e.g. Base Camp" maxlength="12">
+    <p class="rename-menu-label">Details for <span id="renameTargetName"></span></p>
+    <input id="renameInput" type="text" placeholder="Custom name" maxlength="12">
+    <select id="statusSelect">
+        <option value="">No status</option>
+        <option value="planned">Planned</option>
+        <option value="in-progress">In Progress</option>
+        <option value="built">Built</option>
+    </select>
+    <textarea id="notesInput" placeholder="Notes..." maxlength="200" rows="3"></textarea>
     <div class="rename-menu-actions">
         <button type="button" id="renameSaveBtn" class="tool-btn">Save</button>
-        <button type="button" id="renameClearBtn" class="tool-btn rename-clear-btn">Clear</button>
+        <button type="button" id="renameClearBtn" class="tool-btn rename-clear-btn">Clear All</button>
     </div>
 </div>
 
