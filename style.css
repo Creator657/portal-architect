@@ -137,7 +137,9 @@ label {
     color: var(--label-color);
 }
 
-input {
+input,
+select,
+textarea {
     width: 100%;
     padding: 12px;
     margin-top: 5px;
@@ -146,9 +148,16 @@ input {
     border: 1px solid var(--input-border);
     border-radius: 8px;
     font-size: 16px;
+    font-family: inherit;
 }
 
-input:focus {
+textarea {
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
     outline: none;
     border-color: var(--input-focus-border);
     box-shadow: var(--input-focus-shadow);
@@ -763,6 +772,86 @@ body.mobile-mode .modal-box p {
     transform: none;
 }
 
+.tag-menu-btn {
+    right: 206px;
+}
+
+#tagMenuBtn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .4);
+}
+
+#tagMenuBtn:disabled:hover {
+    transform: none;
+}
+
+.tag-menu {
+    right: 206px;
+    min-width: 170px;
+}
+
+.tag-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.tag-menu-clear {
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    margin-top: 4px !important;
+    padding-top: 12px !important;
+    color: var(--tool-hint-color);
+}
+
+.portal-category-dot {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, .5);
+    z-index: 3;
+}
+
+.portal-status-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, .5);
+    z-index: 3;
+}
+
+.portal-notes-icon {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    font-size: 10px;
+    line-height: 1;
+    background: rgba(0, 0, 0, .55);
+    border-radius: 4px;
+    padding: 2px 3px;
+    z-index: 3;
+}
+
+.save-code-box {
+    font-family: monospace;
+    font-size: 11px;
+    word-break: break-all;
+}
+
 .theme-menu-btn {
     right: 20px;
 }
@@ -872,6 +961,15 @@ body.mobile-mode .rename-menu-btn {
 
 body.mobile-mode .rename-menu {
     right: 118px;
+    bottom: 66px;
+}
+
+body.mobile-mode .tag-menu-btn {
+    right: 170px;
+}
+
+body.mobile-mode .tag-menu {
+    right: 170px;
     bottom: 66px;
 }
 
